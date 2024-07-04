@@ -119,6 +119,8 @@ def get_predictions(route_id: str, stop_id: str) -> List[Prediction]:
     return predictions
 
 class Route:
+    _TYPE_BUS = 3
+
     id: str
     name: str
     direction_destinations: List[str]
@@ -138,8 +140,13 @@ def get_route(id: str) -> Route:
     if len(res['data']) != 1:
         raise RuntimeError(f"unexpected number of routes returned: expected 1 got %d", len(res['data']))
 
+
     attributes = res['data'][0]['attributes']
-    return Route(id, attributes['long_name'], attributes['direction_destinations'])
+
+    # The bus route names are way too long, so just use the short names like '83'
+    name_attribute_key = 'short_name' if attributes['type'] == Route._TYPE_BUS else 'long_name'
+
+    return Route(id, attributes[name_attribute_key], attributes['direction_destinations'])
 
 def get_stop(id: str) -> str:
     st = pymbta3.Stops(key=config.apikey)
@@ -175,6 +182,7 @@ def main():
     values = [
         ('Green-E', 'place-mgngl'),
         ('Red', 'place-cntsq'),
+        ('83', '2454'),
     ]
     for x in values:
         output(*x)
