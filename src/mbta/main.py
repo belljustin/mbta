@@ -43,7 +43,7 @@ class Prediction:
     
     def is_valid(self, now: datetime.datetime) -> bool:
         if self.departure_time is None:
-            return False, datetime.MINYEAR
+            return False
         
         dt = self.departure_time - now
         return dt.total_seconds() >= 0
