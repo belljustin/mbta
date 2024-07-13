@@ -3,22 +3,33 @@ requires = ["setuptools >= 61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "mbta"
-version = "0.1.0"
+name = "mbta-epaper"
+version = "0.1.6"
 authors = [
     { name = "Justin Bell", email = "belljustin87@gmail.com" },
 ]
 description = "An application for displaying upcoming Massachusetts Bay Transportation Authority (MBTA) arrival times on an eink display"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "pymbta3>=0.0.5.dev0"
+    "pymbta3>=0.0.5.dev0",
+    "pillow>=10.4.0",
+    "spidev>=3.6",
+    "gpiozero>=2.0.1",
+    "RPi.GPIO>=0.7.1",
+    "rpi-lgpio>=0.6"
 ]
 
 [project.scripts]
 mbta = "mbta.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"mbta.data" = ["Font.ttc"]
