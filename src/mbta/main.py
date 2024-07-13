@@ -79,6 +79,9 @@ def get_predictions(route_id: str, stop_id: str) -> List[Prediction]:
     if 'errors' in res and len(res['errors']):
         raise RuntimeError(f"an error occured while getting predictions: {res['errors']}.")
     
+    if len(res['data']) == 0:
+        return []
+
     vehicles: Mapping[str, Vehicle] = {}
     for included in res['included']:
         if included['type'] != 'vehicle':
