@@ -1,0 +1,12 @@
+[Unit]
+Description=MBTA Raspberry Pi Waveshare_epd2in13_V4 e-ink display service.
+
+[Service]
+Restart=on-failure
+# ensures the buffer does not have to become full before output to STDOUT/STDERR
+Environment=PYTHONUNBUFFERED=1
+Environment=MBTA_APIKEY=${MBTA_APIKEY}
+ExecStart=${VIRTUALENV}/bin/mbta --display pi
+
+[Install]
+WantedBy=default.target
