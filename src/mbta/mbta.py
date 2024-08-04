@@ -1,6 +1,6 @@
 import datetime
 import logging
-from typing import List, Mapping
+from typing import List, Mapping, Optional
 
 import pymbta3
 
@@ -63,9 +63,9 @@ class Prediction:
     status: str
     departure_time: datetime.datetime
     headsign: str
-    vehicle: Vehicle
+    vehicle: Optional[Vehicle]
 
-    def __init__(self, stop_sequence: int, status: str, departure_time: datetime.datetime, headsign: str, vehicle: Vehicle):
+    def __init__(self, stop_sequence: int, status: str, departure_time: datetime.datetime, headsign: str, vehicle: Optional[Vehicle]):
         self.stop_sequence = stop_sequence
         self.status = status
         self.departure_time = departure_time
@@ -87,7 +87,7 @@ class Prediction:
             return Prediction._ERROR
         seconds = (self.departure_time - now).total_seconds()
         
-        if seconds <= 90 and self.vehicle.is_stopped_at(self.stop_sequence):
+        if seconds <= 90 and self.vehicle is not None and self.vehicle.is_stopped_at(self.stop_sequence):
             return Prediction._BOARDING
         
         if seconds <= 30:
@@ -142,11 +142,11 @@ def get_predictions(route_id: str, stop_id: str) -> List[Prediction]:
             continue
         departure_time = datetime.datetime.strptime(departure_time_str, "%Y-%m-%dT%H:%M:%S%z")
 
+        vehicle: Optional[Vehicle] = None
         vehicle_data = data['relationships']['vehicle']['data']
-        if vehicle_data is None:
-            continue
-        vehicle_id = vehicle_data['id']
-        vehicle = vehicles[vehicle_id]
+        if vehicle_data is not None:
+            vehicle_id = vehicle_data['id']
+            vehicle = vehicles[vehicle_id]
 
         trip_id = data['relationships']['trip']['data']['id']
         headsign = trips[trip_id]
