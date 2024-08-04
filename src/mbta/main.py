@@ -2,7 +2,6 @@ import logging
 import itertools
 import argparse
 import time
-from typing import Type
 
 from mbta.mbta import get_board
 from mbta.display import Display, StdoutDisplay, PILDisplay

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mbta-epaper"
-version = "0.1.6"
+version = "0.1.7"
 authors = [
     { name = "Justin Bell", email = "belljustin87@gmail.com" },
 ]
